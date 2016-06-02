@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>COMPRA,VENTAS Y ANUNCIOS</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+    </head>
+    <body>   
+         <div id="wrapper">
+	<div id="menu">
+		<ul>
+		
+			<li class="current_page_item"><a href="usuarios.html">          Usuarios          </a></li>
+			<li><a href="articulos.html">          Articulos          </a></li>
+			<li><a href="categorias.html">          Categorias          </a></li>
+			<li><a href="registrarse.html">          Registrarse          </a></li>
+
+		</ul>
+	</div>
+	<!-- end #menu -->
+	<div id="header">
+		<div id="logo">
+			<h1><a href="#">compra,venta y anuncios</a></h1>			
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="page">
+	<div id="page-bgtop">
+	<div id="page-bgbtm">
+		<div id="content">
+			<div class="post">
+				<h2 class="title"><a href="#">Welcome to compraventayanuncios  </a></h2>
+				<p class="meta"><span class="date">Noviembre 11, 2015</span><span class="posted">Posted by <a href="#">Someone</a></span></p>
+				<div style="clear: both;">&nbsp;</div>
+				<div class="entry">								
+           
+            <a href="/usuarios/formulario/nuevo">Nuevo usuario</a>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th><th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{# usuarios }}
+                    <tr>
+                        <td>{{ nombre }}</td>
+                        <td>{{ email }}</td>
+                    </tr>
+                    {{/ usuarios }}
+                </tbody>
+            </table>
+        
+				</div>
+			</div>
+			
+		<div style="clear: both;">&nbsp;</div>
+		</div>
+		<!-- end #content -->
+		<div id="sidebar">
+			<ul>
+				<li>
+					<div id="search" >
+					<form method="get" action="#">
+						<div>
+							<input type="text" name="s" id="search-text" value="" />
+							<input type="submit" id="search-submit" value="GO" />
+						</div>
+					</form>
+					</div>
+					<div style="clear: both;">&nbsp;</div>
+				</li>
+				<li>
+					<h2>Nuevos</h2>
+					<p>Empresa de compra,VENTAS Y ANUNCIOS.</p>
+				</li>
+				<br>
+				
+				
+			</ul>
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	</div>
+	</div>
+	<!-- end #page -->
+</div>
+	<div id="footer">
+		<p><a href="http://www.facebook/compraventayanuncios.com/">compra,venta y anuncios</a>.</p>
+	</div>
+	<!-- end #footer -->
+       
+    </body>
+</html>

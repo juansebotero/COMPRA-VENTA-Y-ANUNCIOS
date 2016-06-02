@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>COMPRA,VENTA Y ANUNCIOS</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+    </head>
+    <body>
+        <div>
+            <form id="form-articulo">
+            <label>Id:<input type="text" name="ID"></label><br>
+            <label>Nombre: <input type="text" name="nombre"></label><br>
+            <label>Codigo: <input type="text" name="codigo"></label><br>
+            <label>Valor: <input type="text" name="valor"></label><br>
+            <input type="submit" name="Guardar">
+            </form>
+        </div>
+        <div>
+            <table id="table-articulos">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Codigo</th>
+                        <th>Valor</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <script src="/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript">
+            var idArticulo = 0;
+            
+            function llenarSelectCategoria() {
+                $.ajax({
+                    url: '/api/categorias',
+                    type: 'GET'
+                }).done(function(data) {
+                    var select = $('select[name="categoria_id"]');
+                    $.each(data, function(i, categoria) {
+                        var option = $('<option>');
+                        option.attr('value', categoria.id);
+                        option.text(categoria.nombre);
+                        select.append(option);
+                    });
+                });
+            }
+            
+            function llenarTabla() {
+                $.ajax({
+                    url: '/api/articulos',
+                    type: 'GET'
+                }).done(function(data) {
+                    var tbody = $('#table-articulos tbody');
+                    tbody.empty();
+                    $.each(data, function(i, articulo) {
+                        var tr = $('<tr>');
+                        var td_codigo = $('<td>');
+                        td_codigo.html(articulo.codigo);
+                        var td_nombre = $('<td>');
+                        td_nombre.html(articulo.nombre);
+                        var td_categoria = $('<td>');
+                        td_categoria.html(articulo.categoria ? articulo.categoria.nombre : '');
+                        var td_acciones = $('<td>');
+                        var a_editar = $('<a href="#">Editar</a>');
+                        a_editar.on('click', function(event) {
+                            event.preventDefault();
+                            $.ajax({
+                                url: '/api/articulos/' + articulo.id,
+                                type: 'GET'
+                            }).done(function(data) {
+                                idArticulo = data.id;
+                                $('input[name="codigo"]').val(data.codigo);
+                                $('input[name="nombre"]').val(data.nombre);
+                                $('select[name="categoria_id"]').val(data.categoria ? data.categoria.id : null);
+                            });
+                        });
+                        td_acciones.append(a_editar);
+                        td_acciones.append(' ');
+                        var a_eliminar = $('<a href="#">Eliminar</a>');
+                        a_eliminar.on('click', function(event) {
+                            event.preventDefault();
+                            if(confirm("Esta seguro de que desea borrar este artículo?")) {
+                                $.ajax({
+                                    url: '/api/articulos/' + articulo.id,
+                                    type: 'DELETE'
+                                }).done(function() {
+                                    llenarTabla();
+                                });
+                            }
+                        });
+                        td_acciones.append(a_eliminar);
+                        tr.append(td_codigo);
+                        tr.append(td_nombre);
+                        tr.append(td_categoria);
+                        tr.append(td_acciones);
+                        tbody.append(tr);
+                    });
+                });
+            }
+            $(document).ready(function() {
+                llenarTabla();
+                llenarSelectCategoria();
+            });
+            $('#form-articulo').on('submit', function(event) {
+                event.preventDefault();
+                var datos = $(this).serialize();
+                
+                var url = (idArticulo === 0) ? '/api/articulos' : '/api/articulos/' + idArticulo;
+                var type = (idArticulo === 0) ? 'POST' : 'PUT';
+                
+                $.ajax({
+                    url: url,
+                    data: datos,
+                    type: type
+                }).done(function() {
+                    alert('El artículo fue guardado correctamente');
+                    $('input[name="codigo"]').val("");
+                    $('input[name="nombre"]').val("");
+                    $('select[name="categoria_id"]').val("");
+                    idArticulo = 0;
+                    llenarTabla();
+                }).fail(function() {
+                    alert('No se pudo guardar');
+                });
+            });
+        </script>
+    </body>
+</html>
